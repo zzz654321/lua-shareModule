@@ -1,6 +1,11 @@
 https://github.com/oldj/html5-tower-defense
 
-https://github.com/memononen/nanovg
+https://github.com/memononen/nanovg 
+    
+    NanoVG is small antialiased vector graphics rendering library for OpenGL. 
+    It has lean API modeled after HTML5 canvas API. 
+    It is aimed to be a practical and fun toolset for 
+        building scalable user interfaces and visualizations.
 
 https://github.com/android/platform_system_core  
 
@@ -11,7 +16,15 @@ https://github.com/recastnavigation/recastnavigation Recast & Detour
       It is fast which means swift turnaround times for level designers
       It is open source so it comes with full source and you can customize it to your heart's content.
 
-https://github.com/egrcc/zhihu-python
+https://github.com/egrcc/zhihu-python 
+
+    获取知乎信息 采用 Python2.7 编写，用来方便地获取知乎上各种内容的信息，
+      并且可以方便地将答案备份导出为 txt 或 markdown 文件。 
+    由于知乎官方目前没有提供 api，所以有了此项目的存在。
+    
+    使用 Python3 的类似项目可以参见：https://github.com/7sDream/zhihu-py3 。
+    使用 PHP 的类似项目可以参见：https://github.com/ahonn/zhihu-php 。
+    使用 Go 的类似项目可以参见：https://github.com/DeanThompson/zhihu-go 。
 
 https://github.com/peersuasive/luce 
 
