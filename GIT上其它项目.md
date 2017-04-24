@@ -59,7 +59,8 @@ https://github.com/VilleKrumlinde/zgameeditor  For more info please visit http:/
 
 https://github.com/kaepora/cryptocat-legacy  
 
-    Easy to use encrypted instant messaging built on modern web technologies. https://crypto.cat
+    Easy to use encrypted instant messaging built on modern web technologies. 
+    https://crypto.cat
     It uses the OTR protocol over XMPP for encrypted two-party chat
 
 https://github.com/farbrausch/fr_public  部分 64K OpenGL DEMO src 
@@ -69,3 +70,22 @@ https://github.com/roundsheep/rpp 国产开源编程语言 rpp 脚本语言, 性
 https://github.com/zhanggyb/BlendInt 类似 blender 3D 软件的 UI 库, openGL 
 
 https://github.com/MyGUI/mygui 知名 openGL UI 库, 但比较重 http://mygui.info/
+
+https://github.com/openresty/luajit2 http://luajit.org/luajit.html 
+
+https://github.com/nwjs/nw.js http://nwjs.io 
+
+    node-webkit is an app runtime based on Chromium and node.js. 
+
+https://github.com/ejoy/ejoy2d 云风 2D 游戏引擎 http://blog.codingnow.com/2013/12/ejoy2d.html
+
+    API https://github.com/cloudwu/ejoy2d/blob/master/doc/apicn.md (work in process , in Chinese)
+
+https://github.com/Selz/plyr A simple HTML5 media player http://plyr.io
+
+https://github.com/pixijs/pixi.js   Pixi Renderer http://www.goodboydigital.com/runpixierun/
+
+    Super fast HTML 5 2D rendering engine that uses webGL with canvas fallback
+
+https://github.com/ruanyf/react-demos  simple demos of React.js
+
