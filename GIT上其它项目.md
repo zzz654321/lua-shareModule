@@ -47,7 +47,10 @@ https://github.com/torch/torch7
 
 https://github.com/hashcat/hashcat   
     
-    oclHashcat is the world's fastest and most advanced GPGPU-based password recovery utility, supporting five unique modes of attack for over 170 highly-optimized hashing algorithms. oclHashcat currently supports AMD (OpenCL) and Nvidia (CUDA) graphics processors on GNU/Linux and Windows 7/8/10, and has facilities to help enable distributed password cracking.
+    oclHashcat is the world's fastest and most advanced GPGPU-based password recovery utility, 
+    supporting five unique modes of attack for over 170 highly-optimized hashing algorithms. 
+    oclHashcat currently supports AMD (OpenCL) and Nvidia (CUDA) graphics processors 
+      on GNU/Linux and Windows 7/8/10, and has facilities to help enable distributed password cracking.
 
 https://github.com/VilleKrumlinde/zgameeditor  For more info please visit http://www.zgameeditor.org
 
@@ -89,3 +92,44 @@ https://github.com/pixijs/pixi.js   Pixi Renderer http://www.goodboydigital.com/
 
 https://github.com/ruanyf/react-demos  simple demos of React.js
 
+https://github.com/eledot/LoveFrames   A GUI library for LÖVE https://love2d.org/ 
+
+https://github.com/hltj/wxMEdit  an improved version of MadEdit 
+
+https://github.com/nigels-com/glew The OpenGL Extension Wrangler Library 
+
+    http://glew.sourceforge.net/ 
+
+https://github.com/wzman/werkkzeug4CE A complete 3D suite to make 3D real-time animations
+
+    http://werkkzeug4ce.blogspot.com/
+
+https://github.com/kitsilanosoftware/EAWebKit   EA fork of the Webkit project
+
+    http://kitsilanosoftware.com/
+
+https://github.com/lurenpluto/BOLT_SDK  迅雷 Bolt UIEngine SDK http://bolt.xunlei.com
+
+https://github.com/Lua-cURL/Lua-cURLv3  Lua binding to libcurl 
+
+https://github.com/Playermet/CurLua CURL bind and wrapper for Lua+FFI 
+
+https://github.com/miniwebkit/src a mini webkit ,for GUI dev  扫地的 miniblink 前身
+
+https://github.com/zenakuten/IrrLua  IrrLua is a Lua binding for the Irrlicht 3D rendering engine
+
+     Irrlicht v1.1   2013 
+
+https://github.com/BlzFans/wke   wke 的原始版本
+
+    3D Web UI. Web and Flash Embedded in 3D games, based on WebKit
+
+https://github.com/BlzFans  里面有些好东西可以看看
+
+https://github.com/mkottman/AndroLua  Lua and LuaJava ported to Android
+
+    AndroLua 原始版本 
+
+https://github.com/mkottman/lqt   Lua bindings for Qt4 by Mauro Iazzi
+
+    
