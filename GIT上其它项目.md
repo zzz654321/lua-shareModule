@@ -132,4 +132,8 @@ https://github.com/mkottman/AndroLua  Lua and LuaJava ported to Android
 
 https://github.com/mkottman/lqt   Lua bindings for Qt4 by Mauro Iazzi
 
-    
+https://github.com/zhaolong/libparser  http://bbs.pediy.com/forum-161.htm
+
+    解析静态库(Lib)文件，提取出所有函数信息，组织成自定义格式文件
+
+
