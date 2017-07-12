@@ -1,0 +1,531 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<head>
+	<title> table_test1 </title>
+	
+	<link rel="stylesheet" href="animate.min.css" />
+	
+	<style type="text/css">  
+		/* * {  font-size:14px;  padding:0;  margin:0; } */
+		html,body {  height:90%; 
+			-apple-dashboard-region:dashboard-region(control rectangle 0px 0px 0px 0px); 
+			background-color:#aaeeaa; 
+		} 
+		/* #wrapperHead{  width:583px;  position:absolute;  top:21px;  left:41px;  z-index:100;  overflow:hidden; } */
+		/* #wrapperBody{  width:600px;  height:90%;  overflow-y:auto;  overflow-x:auto;  border:solid 1px black;  position:absolute;  top:20px;  left:40px; } */
+		table{  width:700px;  border-collapse:collapse;  table-layout:fixed; } 
+		tr:hover{  background-color:#eee; } 
+		td{  padding:3px;  white-space:nowrap;  overflow:hidden;  text-overflow:ellipsis;  cursor:default;  height:21px; } 
+		th{  padding:3px;  white-space:nowrap;  overflow:hidden;  text-overflow:ellipsis;  cursor:default;  background-color:#06c;  color:white;  border-left:solid 1px darkgray;  height:15px; } 
+		#msg{  position:absolute;  top:5px;  left:10px; } 
+		.btn{  width:45px; } 
+		
+	</style> 
+	
+	<script type="text/javascript" language="javascript" 
+		src="html/jquery.js" > </script> 
+	<script language="javascript"> 
+	//var WND_ALPHA= 255; //窗体透明 
+	
+	function ID_(n ) { return document.getElementById(n ); } 
+	function add_tr() { 
+		var t1= ID_("ed_insertTbl" ).value; 
+		var r1= $('input[name="radioTblType"]:checked').val(); 
+		if(1== r1 ) { // 虚拟表格
+			setCount_VirtualTable(t1, 
+				parseInt(ID_("ed_insertRowCount" ).value ) ); 
+			return; 
+		} 
+		
+		var tbl= ID_(t1 ); 
+		if(jqVirtualTable.dataRow ) { // 清除虚拟表格 
+			jqVirtualTable.data= []; 
+			jqVirtualTable.dataRow= null; 
+			jqVirtualTable.page= 0; 
+			jqVirtualTable.pageRows= jqVirtualTable.colCount= 0; 
+			jqVirtualTable.render(); 
+			jqVirtualTable.controls.wrapObj.scroll(null ); 
+			jqVirtualTable.controls.tabObj.click(null ); 
+			jqVirtualTable.controls.wrapObj= null; 
+			jqVirtualTable.controls.tabObj= null; 
+		} 
+		
+		var n= tbl.rows.length; var i= 0, cell; 
+		var time_= new Date().getTime(); 
+		
+		if("undefined"!= typeof(app_dbg_str ) ) 
+			app_dbg_str(t1,tbl,n,time_ ); 
+		t1= ID_("ed_insertRowCount" ).value; 
+		t1= parseInt(t1 ) 
+		for(; t1> i; ++i ) { 
+			var row= tbl.insertRow(n+ i ); 
+			cell= row.insertCell(0 ); //cell.setAttribute("style", "background-color:#554433; " ); 
+			cell.innerHTML= "第" + (n+ 1+ i )+ "行第1列"; 
+			cell= row.insertCell(1 ); 
+			cell.innerHTML= "第" + (n+ 1+ i )+ "行第2列"; 
+			cell= row.insertCell(2 ); 
+			cell.innerHTML= "第" + (n+ 1+ i )+ "行第3列"; 
+		} 
+		time_= ((new Date().getTime()- time_ )/ 1000 )+ " sec"; 
+		ID_("ed_time_" ).value= time_; 
+	} 
+	
+	var jqVirtualTable= { 
+		data:[], //数据源，需要提供 
+		dataRow: null, //@提供数据的接口函数 
+		page: 0, //当前页码 
+		pageRows: 0, //每页行数，需要提供 
+		headerHeight: 21, //th行高（pixel），需要提供 
+		rowHeight: 27, //td行高（pixel），需要提供 
+		colCount: 3, //列数 
+		controls: { //缓存控件 
+			tabObj: null, //数据table 
+			wrapObj: null, //外层包裹的div 
+		}, 
+		//初始化 
+		init: function(tableId ) { 
+			this.pageRows= 25; 
+			//缓存主要控件 
+			this.controls.tabObj= $("#"+ tableId ); 
+			this.controls.wrapObj= this.controls.tabObj.parent(); 
+			this.controls.wrapObj.css({"height":"76%", 
+				"overflow-y":"auto", "overflow-x":"auto", 
+				} ) 
+			//数据计算 
+			this.colCount= this.controls.tabObj.
+					find("tr:eq(0)" ).find("th").length; 
+			//挂接事件 
+			this.controls.wrapObj.scroll(
+				$.proxy(this.scrollhandler, this ) ); 
+			this.controls.tabObj.click(
+				$.proxy(this.clickhandler, this ) ); 
+			//绘制表格 
+			this.render(); 
+		}, 
+		//绘制表格 
+		render: function(){   
+			this.controls.tabObj.find("tr:gt(0)" ).remove(); 
+			var startIndex= this.page == 0? 0 : 
+					((this.page- 1) * this.pageRows ); 
+			var endIndex= startIndex+ 3* this.pageRows; 
+			var t1= this.dataRow? this.dataRow(-1 ): 
+					this.data.length; 
+			if(endIndex> t1 ) endIndex= t1; 
+			var topH= startIndex * this.rowHeight;   
+			var bottomH= (t1- (endIndex- startIndex+ 1 ) )* 
+					this.rowHeight- topH; 
+			if(bottomH< 0 ) bottomH = 0; 
+			if(startIndex!= endIndex ) { var html= []; 
+				if(0< topH ) 
+					html.push("<tr><td colspan='"+ this.colCount 
+						+ "' style='padding:0;height:" 
+						+ topH+ "px'></td></tr>" ); 
+				html.push(this.getRowsHtml(startIndex, endIndex ) ); 
+				if(0< bottomH ) 
+					html.push("<tr><td colspan='"+ this.colCount 
+						+ "' style='padding:0;height:" 
+						+ bottomH+ "px'></td></tr>" ); 
+				$(html.join('' ) ).appendTo(
+					this.controls.tabObj.find("tbody" ) ); 
+			} 
+		}, 
+		//生成给定区间行的html，需要重写  
+		getRowsHtml: function(start, end){   
+			var html= []; 
+			for(var i= start;i < end; ++i ) { 
+				var item= this.dataRow? this.dataRow(i ): 
+						this.data[i ]; 
+				html.push("<tr><td>" + item[0 ] + ". " 
+					+ item[1 ][0 ]+ "("+ item[2 ]+ ")</td>" ); 
+				html.push("<td>"+ item[1 ][1 ]+ "</td>" ); 
+				html.push("<td>"+ item[3 ]+ "</td>" ); 
+				html.push("<td><button class='btn' pid='" 
+					+ item[0 ]+ "'>忽略</button></td></tr>" ); 
+			} 
+			return html.join(''); 
+		}, 
+		//外层包裹div的scroll事件处理  
+		scrollhandler: function() { 
+			//$("#wrapperHead" ).scrollLeft(
+			//	this.controls.wrapObj.scrollLeft() ); 
+			
+			//计算纵向滚动对应的页码，判断是否需要换页 
+			var scrollTop= this.controls.wrapObj.scrollTop();   
+			var posPage= Math.floor((scrollTop+ this.headerHeight)/ 
+					(this.pageRows* this.rowHeight ) ); 
+			if(posPage!= this.page ) { 
+				this.page= posPage; this.render(); 
+				this.controls.wrapObj.focus(); 
+			} 
+		}, 
+		//表格click事件处理，需要重写  
+		clickhandler: function(e){   
+			var eleName= e.target.tagName.toLowerCase(); 
+			if(eleName!= "button" ) return; 
+			var id= $(e.target ).attr("pid" ); 
+			alert("忽略id="+ id ); 
+		}, 
+	} 
+	
+	function setCount_VirtualTable(tblName, count_ ) { 
+		//alert(tblName+ "    "+ count_ ); return; 
+		//构造测试用数据 
+		var fileNameArray = [ 
+				["svch0st.dll", "C:\\Windows\\system32"], 
+				["win.com", "D:\\Program Files"], 
+				["n0tepad.exe", "C:\\"], 
+				["twunk32.exe", "C:\\windows"], 
+				["regedit.exe", "C:\\Winnt\\system32\\drivers"], 
+				["hh.exe", "F:\\Test"] 
+			]; 
+		var virusNameArray= 
+			["灰鸽子", "尼姆达", "熊猫烧香", "蠕虫"]; 
+		var handleState= ["已隔离", "不处理", "未能隔离" ]; 
+		//获取行数据 
+		function dataRow(i ) { 
+			if(-1== i ) 
+				return count_; // MAX 4970* 1000; 
+			return [ i+ 1, 
+					fileNameArray[Math.floor(Math.random()* 6 ) ], 
+					virusNameArray[Math.floor(Math.random()* 4 ) ], 
+					handleState[Math.floor(Math.random()* 3 ) ], 
+				]; 
+		}; 
+		jqVirtualTable.dataRow= dataRow; 
+		//生成实际数据 
+		if(!jqVirtualTable.dataRow ) 
+			for(var i= 0; i< dataRow(-1 ); ++i ) 
+				jqVirtualTable.data.push(dataRow(i ) ); 
+		//初始化 
+		jqVirtualTable.init(tblName ); 
+		/*/ 
+		//测试追加数据  
+		window.setInterval(function(){   
+				for(var i = 0;i < 100;++i ) 
+					jqVirtualTable.data.push(dataRow(i ) ); 
+				jqVirtualTable.render(); 
+			}, 5000 );  //*/ 
+	} 
+	
+	</script> 
+
+</head>
+
+<body>
+<!--iframe id="txt_file" FRAMEBORDER=0 type="text/plain" 
+	style="width:100%" ></iframe-->
+<!--embed src="http://music.163.com/style/swf/widget.swf?sid=13871205&type=0&auto=1&width=310&height=430" width="330" height="450"  allowNetworking="all"></embed-->
+
+<div id="TEST_ANI_CSS" style="width:100px;height:4px;left:80px;background-color:#033" > </div> 
+
+<input type="radio" name="radioTblType" value="0" CHECKED > 
+	普通表格 </input > 
+<input type="radio" name="radioTblType" value="1" > 
+	虚拟表格 </input > 
+<input type="button" name="btn_insertRow" 
+	onclick="add_tr();" value="执行" >
+<input id="ed_insertRowCount" value="20" 
+	style="width:64px"></input>
+<input id="ed_insertTbl" value="tbl1" 
+	style="width:64px"></input>
+<input id="ed_time_" value="0" 
+	style="width:100px"></input>
+<select id="selItem" >
+<input type="button" name="btn_insertRow" onclick="TEST_anBtn();" 
+	style= "background-color: rgba(255,192,192,255)" value="大量 btn 随机微动" >
+</select>
+<input type="button" name="btn_TEST_ANI_CSS" onclick="TEST_aniCss();" 
+	value="TEST ANI CSS" />
+
+<div > <!-- 外层包装 -->
+<table id="tbl1" style="text-align: left; width: 100%;" 
+	border="1" cellpadding="2" cellspacing="2">
+	<tbody> 
+		<tr>
+			<td style="vertical-align: top; color:#0000ff">a<br/>
+			</td>
+			<td style="vertical-align: top;">b<br/>
+			</td>
+			<td style="vertical-align: top;">c<br/>
+			</td>
+		</tr>
+		<tr>
+			<td style="vertical-align: top;"><br/>
+			</td>
+			<td style="vertical-align: top;"><br/>
+			</td>
+			<td style="vertical-align: top;"><br/>
+			</td>
+		</tr>
+	</tbody>
+</table>
+</div > 
+
+<div > <!-- 外层包装 --> 
+<table id="tbl2">
+	<tbody>
+		<tr> <td>第1行第1列</td> <td>第1行第2列</td> </tr>
+		<tr> <td>第2行第1列</td> <td>第2行第2列</td> </tr>
+		<tr> <td>第3行第1列</td> <td>第3行第2列</td> </tr>
+	</tbody>
+</table>
+
+</div > 
+<div id="BTNs_ani" /> 
+<br>
+
+<br>
+
+<!--object id="t001" type="application/x-frmwk-demo"/-->
+
+</body>
+<script language="javascript"> 
+	function iframe_load(url_ ) { 
+		var doc= document; 
+		var iframe= doc.body.insertBefore(doc.createElement('iframe'), 
+				doc.body.firstChild ); 
+		iframe.id="txt_file"; //iframe.type="text/plane"; 
+		// style the iframe with some CSS
+		//iframe.style="width:100%; border-style:none; "; // chrome NO! 
+		iframe.style.width= "100%"; iframe.style["borderStyle" ]= "none"; 
+		iframe.src= url_; //iframe.isContentEditable= true; 
+		iframe.onload= function() { 
+			//iframe.contentWindow.document.charset="utf-8"; //RDONLY 
+			iframe.charset="utf-8"; 
+			//var btn= document.createElement('input'); 
+			//btn.style.position= "fixed"; btn.value= url_; 
+			//document.body.insertBefore(btn, document.body.firstChild ); 
+		} 
+		/*/ 
+		doc= iframe.contentWindow.document; 
+		doc.open().write('<body onload="function() { var d = document; '+ 
+	　	'var i1= d.body.appendChild(d.createElement(\'script\')); '+ 
+			'i1.type=\'text/html\'; i1.src=\''+ url_+ '\'; }" ></body>' ); 
+		doc.close(); //iframe onload event happens //*/
+	} 
+	function add_selItem(str_, onclick ) { 
+		var selItem= ID_("selItem" ); 
+		var objOption= document.createElement("OPTION" ); 
+		selItem.add(objOption ); objOption.text= str_; 
+		// chrome 里面 onclick 无效, onpause 填充, selItem.onchange 处理 
+		//objOption.onclick= onclick; 
+		objOption.onpause= onclick; 
+		//var inner="<option value='"+ str_prefix+ 
+		//		i+ "'>"+ str_prefix+ i+ "</option>"; 
+	} 
+	window.onload= function() { 
+		var url_= "file:///d:/_needFix/mzd-01.txt"; 
+		//var url_= "http://www.126.com"; 
+		//txt_file.src= url_; //txt_file.isContentEditable= true; 
+		var f1, f2, selItem; iframe_load(url_ ); 
+		f1= __TEST('addQueen(new Array(N+ 1 ), 1 ); ' ); 
+		//f1= __TEST('for(var i= 0; 10000000> i; i++ );' ); 
+		f2= __TEST('render(null, null ); ' ); 
+		add_selItem("TEST_queen8", f1 ); 
+		add_selItem("TEST_smallpt", f2 ); 
+		add_selItem("______________" ); 
+		for(var i= 0;i < 5; ++i ) add_selItem("_@_@_@_@ _"+ (i+ 1 ) ); 
+		selItem= ID_("selItem" ); selItem.onchange= function() { 
+			if(this.options[this.selectedIndex ].onpause ) 
+				this.options[this.selectedIndex ].onpause(); 
+		}; 
+		selItem.selectedIndex= -1; f1(); 
+	} 
+	function __TEST(strCmd ) { 
+		return function() { var func= function() { var d1= Date.now(); 
+				eval(strCmd ); ID_("ed_time_" ).value= Date.now()- d1; 
+				selItem.selectedIndex= -1; 
+			}; setTimeout(func, 10 ); 
+		} 
+	} 
+	
+	var BTNs_= new Array(); var timer_= null; 
+	var X= 0, Y= 0; var W= 64, H= 32; 
+	function TEST_anBtn_onclick(n ) { 
+		return function() { 
+			var s= strFormat("ABC %d", n ); 
+			alert(s ) 
+		} 
+	} 
+	function TEST_anBtn() { 
+		if(0== BTNs_.length ) { 
+			var div= ID_("BTNs_ani" ); 
+			var frag_= document.createDocumentFragment(); 
+			X= div.offsetLeft; Y= div.offsetTop; 
+			for(var i= 0; W> i; ++i ) for(var j= 0; H> j; ++j ) { 
+				var btn= frag_.appendChild(document.createElement('input') ); 
+				btn.style.position= "fixed"; 
+				var c_= strFormat("#%02x%02x%02x", 
+						i* 4, j* 8, 0x7f+ Math.random()* 0x80 ); 
+				btn.style.backgroundColor= c_; 
+				btn.style.width= "10px"; btn.style.height= "10px"; 
+				btn.style.left= (X+ i* 15 )+ "px"; 
+				btn.style.top= (Y+ j* 12 )+ "px"; 
+				//btn.style= "position:fixed; width:10px; height:10px; left:"+ 
+				//		(X+ i* 15 )+ "px; top:"+ (Y+ j* 12 )+ "px; "; //+ "right:"+ 
+				//		//(X+ 9+ i* 35 )+ "px; bottom:"+ (Y+ 12+ j* 32 )+ "px; "; 
+				btn.type= "button"; BTNs_.push(btn ); 
+				btn.onclick= TEST_anBtn_onclick(j* W+ i ); 
+			} div.appendChild(frag_ ); 
+			timer_= setInterval(TEST_anBtn_Timer, 100 ); 
+		} else 	{ clearInterval(timer_ ); timer_= null; 
+			while(0< BTNs_.length ) 
+				ID_("BTNs_ani" ).removeChild(BTNs_.pop() ); 
+		} 
+	} 
+	var R_= document.createRange(); 
+	function TEST_anBtn_Timer() { var i1= 0; 
+		var div= ID_("BTNs_ani" ); //div.style.display = "none"; 
+		//R_.selectNode(div ); var frag_= R_.extractContents(); 
+		for(var i= 0; W> i; ++i ) for(var j= 0; H> j; ++j ) { 
+			var btn= BTNs_[i1 ]; ++i1; 
+			var x= Math.random()* 5- 2; var y= Math.random()* 5- 2; 
+			btn.style.left= x+ X+ i* 15; btn.style.top= y+ Y+ j* 12; 
+			var c_= strFormat("#%02x%02x%02x", 
+					0x7f+ Math.random()* 0x80, i* 4, j* 8 ); 
+			btn.style.backgroundColor= c_; 
+			//? btn.style.transition="-webkit-transform 10ms ease-out"; // 可以不要 
+			//btn.style.webkitTransform= "translate("+ x+ "px, "+ y+ "px )"; // NO opera 
+			
+			//btn.style= "position:fixed; width:10px; height:10px; left:"+ 
+			//		x+ "px; top:"+ y+ "px; "; 
+		} //document.body.appendChild(frag_ ); 
+		//div.style.display= ""; 
+	} 
+	
+	function TEST_aniCss() { 
+		$("#TEST_ANI_CSS" ).addClass('animated bounceOutLeft'); 
+	} 
+	
+	// Javascript sprintf http://www.webtoolkit.info/
+	sprintfWrapper = { 
+
+		init : function () {
+
+			if (typeof arguments == "undefined") { return null; }
+			if (arguments.length < 1) { return null; }
+			if (typeof arguments[0] != "string") { return null; }
+			if (typeof RegExp == "undefined") { return null; }
+
+			var string = arguments[0];
+			var exp = new RegExp(/(%([%]|(\-)?(\+|\x20)?(0)?(\d+)?(\.(\d)?)?([bcdfosxX])))/g);
+			var matches = new Array();
+			var strings = new Array();
+			var convCount = 0;
+			var stringPosStart = 0;
+			var stringPosEnd = 0;
+			var matchPosEnd = 0;
+			var newString = '';
+			var match = null;
+
+			while (match = exp.exec(string)) {
+				if (match[9]) { convCount += 1; }
+
+				stringPosStart = matchPosEnd;
+				stringPosEnd = exp.lastIndex - match[0].length;
+				strings[strings.length] = string.substring(stringPosStart, stringPosEnd);
+
+				matchPosEnd = exp.lastIndex;
+				matches[matches.length] = {
+					match: match[0],
+					left: match[3] ? true : false,
+					sign: match[4] || '',
+					pad: match[5] || ' ',
+					min: match[6] || 0,
+					precision: match[8],
+					code: match[9] || '%',
+					negative: parseInt(arguments[convCount]) < 0 ? true : false,
+					argument: String(arguments[convCount])
+				};
+			}
+			strings[strings.length] = string.substring(matchPosEnd);
+
+			if (matches.length == 0) { return string; }
+			if ((arguments.length - 1) < convCount) { return null; }
+
+			var code = null;
+			var match = null;
+			var i = null;
+
+			for (i=0; i<matches.length; i++) {
+
+				if (matches[i].code == '%') { substitution = '%' }
+				else if (matches[i].code == 'b') {
+					matches[i].argument = String(Math.abs(parseInt(matches[i].argument)).toString(2));
+					substitution = sprintfWrapper.convert(matches[i], true);
+				}
+				else if (matches[i].code == 'c') {
+					matches[i].argument = String(String.fromCharCode(parseInt(Math.abs(parseInt(matches[i].argument)))));
+					substitution = sprintfWrapper.convert(matches[i], true);
+				}
+				else if (matches[i].code == 'd') {
+					matches[i].argument = String(Math.abs(parseInt(matches[i].argument)));
+					substitution = sprintfWrapper.convert(matches[i]);
+				}
+				else if (matches[i].code == 'f') {
+					matches[i].argument = String(Math.abs(parseFloat(matches[i].argument)).toFixed(matches[i].precision ? matches[i].precision : 6));
+					substitution = sprintfWrapper.convert(matches[i]);
+				}
+				else if (matches[i].code == 'o') {
+					matches[i].argument = String(Math.abs(parseInt(matches[i].argument)).toString(8));
+					substitution = sprintfWrapper.convert(matches[i]);
+				}
+				else if (matches[i].code == 's') {
+					matches[i].argument = matches[i].argument.substring(0, matches[i].precision ? matches[i].precision : matches[i].argument.length)
+					substitution = sprintfWrapper.convert(matches[i], true);
+				}
+				else if (matches[i].code == 'x') {
+					matches[i].argument = String(Math.abs(parseInt(matches[i].argument)).toString(16));
+					substitution = sprintfWrapper.convert(matches[i]);
+				}
+				else if (matches[i].code == 'X') {
+					matches[i].argument = String(Math.abs(parseInt(matches[i].argument)).toString(16));
+					substitution = sprintfWrapper.convert(matches[i]).toUpperCase();
+				}
+				else {
+					substitution = matches[i].match;
+				}
+
+				newString += strings[i];
+				newString += substitution;
+
+			}
+			newString += strings[i];
+
+			return newString;
+
+		},
+
+		convert : function(match, nosign){
+			if (nosign) {
+				match.sign = '';
+			} else {
+				match.sign = match.negative ? '-' : match.sign;
+			}
+			var l = match.min - match.argument.length + 1 - match.sign.length;
+			var pad = new Array(l < 0 ? 0 : l).join(match.pad);
+			if (!match.left) {
+				if (match.pad == "0" || nosign) {
+					return match.sign + pad + match.argument;
+				} else {
+					return pad + match.sign + match.argument;
+				}
+			} else {
+				if (match.pad == "0" || nosign) {
+					return match.sign + match.argument + pad.replace(/0/g, ' ');
+				} else {
+					return match.sign + match.argument + pad;
+				}
+			}
+		}
+	}
+	strFormat = sprintfWrapper.init;
+
+</script>
+<script type="text/javascript" language="javascript" 
+	src="__2011/queen8.js"></script> 
+<script type="text/javascript" language="javascript" 
+	src="__2011/smallpt.js"></script> 
+
+</html>
