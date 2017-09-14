@@ -139,3 +139,6 @@ https://github.com/zhaolong/libparser  http://bbs.pediy.com/forum-161.htm
 https://github.com/chokcoco  css 系列有趣效果
 
 https://github.com/stetre lua bind 的系列库, 很不错. FLTK GLFW 
+
+https://github.com/wierton/ 很多有趣的研究, OS 编译器... 
+
