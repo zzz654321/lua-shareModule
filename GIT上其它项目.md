@@ -143,3 +143,5 @@ https://github.com/stetre lua bind 的系列库, 很不错. FLTK GLFW
 https://github.com/wierton/ 很多有趣的研究, OS 编译器... 
 
 https://github.com/John3/awesome-torque3d  Torque3D 比较新的相关站点收集
+
+https://github.com/zero-rp mb 群里面 zero 的一些开源库
