@@ -146,8 +146,16 @@ https://github.com/John3/awesome-torque3d  Torque3D 比较新的相关站点收�
 
 https://github.com/zero-rp mb 群里面 zero 的一些开源库
 
+
+
 https://github.com/PKUanonym/REKCARC-TSC-UHT    清华大学计算机系课程攻略 高star
 
 https://github.com/QSCTech/zju-icicles  浙江大学课程攻略共享计划 高star
+
+https://github.com/lib-pku/libpku   北京大学课程资料整理
+
+https://github.com/USTC-Resource/USTC-Course    中国科学技术大学课程资源
+
+https://github.com/CoolPhilChen/SJTU-Courses/   上海交通大学课程分享
 
 
