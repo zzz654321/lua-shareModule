@@ -145,3 +145,9 @@ https://github.com/wierton/ 很多有趣的研究, OS 编译器...
 https://github.com/John3/awesome-torque3d  Torque3D 比较新的相关站点收集
 
 https://github.com/zero-rp mb 群里面 zero 的一些开源库
+
+https://github.com/PKUanonym/REKCARC-TSC-UHT    清华大学计算机系课程攻略 高star
+
+https://github.com/QSCTech/zju-icicles  浙江大学课程攻略共享计划 高star
+
+
