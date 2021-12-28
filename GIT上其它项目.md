@@ -132,6 +132,8 @@ https://github.com/mkottman/AndroLua  Lua and LuaJava ported to Android
 
 https://github.com/mkottman/lqt   Lua bindings for Qt4 by Mauro Iazzi
 
+https://github.com/xiangyuan/awesome-lua lua 相关的项目
+
 https://github.com/zhaolong/libparser  http://bbs.pediy.com/forum-161.htm
 
     解析静态库(Lib)文件，提取出所有函数信息，组织成自定义格式文件
@@ -157,5 +159,6 @@ https://github.com/lib-pku/libpku   北京大学课程资料整理
 https://github.com/USTC-Resource/USTC-Course    中国科学技术大学课程资源
 
 https://github.com/CoolPhilChen/SJTU-Courses/   上海交通大学课程分享
+
 
 
